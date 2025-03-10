@@ -5,8 +5,8 @@ const sideBarItem = [
   { name: 'Frontend', path: '/blog/frontend' }, // ✅ 변경
   { name: 'Backend', path: '/blog/backend' }, // ✅ 변경
   { name: 'Interactive', path: '/blog/interactive' }, // ✅ 변경
-  { name: 'DSA Coding', path: '/blog/dsa-coding' }, // ✅ 변경
-  { name: 'Project Experience', path: '/blog/project-exp' }, // ✅ 변경
+  { name: 'DSA Coding', path: '/blog/dsaCoding' }, // ✅ 변경
+  { name: 'Project Experience', path: '/blog/projectExp' }, // ✅ 변경
 ];
 </script>
 

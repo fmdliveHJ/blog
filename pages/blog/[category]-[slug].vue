@@ -28,4 +28,9 @@ onMounted(() => {
 });
 </script>
 
-<template></template>
+<template>
+  <div>
+    <h1>{{ post?.title }}</h1>
+    <ContentRenderer :value="post" />
+  </div>
+</template>

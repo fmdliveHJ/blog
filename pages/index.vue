@@ -19,6 +19,15 @@ const postList = computed(() => {
   <div>
     <h1>블로그 포스트 목록</h1>
 
+    <h3>Top Category</h3>
+    <ul>
+      <li v-for="post in postList" :key="post._path">
+        <NuxtLink :to="`/blog/${post.category}-${post.slug}`">{{
+          post.title
+        }}</NuxtLink>
+      </li>
+    </ul>
+
     <ul v-if="posts">
       <li v-for="post in postList" :key="post._path">
         <NuxtLink :to="`/blog/${post.category}-${post.slug}`">{{
@@ -26,6 +35,5 @@ const postList = computed(() => {
         }}</NuxtLink>
       </li>
     </ul>
-    <p v-else>Loading...</p>
   </div>
 </template>

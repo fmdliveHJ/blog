@@ -9,9 +9,9 @@ const { data: blog } = await useAsyncData(() => queryContent('blog').find());
 
 const filteredData = computed(() => {
   if (!blog.value) return [];
-  return blog.value
-    .filter((item) => item.category === category.value)
-    .map((item) => ({
+  return (blog.value as any[])
+    .filter((item: any) => item.category === category.value)
+    .map((item: any) => ({
       ...item,
       slug: item.path.split('/').pop() || '',
     }));
@@ -20,7 +20,6 @@ const filteredData = computed(() => {
 
 <template>
   <div>
-    <h1>{{ category }}</h1>
     <ul>
       <li v-for="item in filteredData" :key="item.slug">
         <NuxtLink :to="`/blog/${category}-${item.slug}`">

@@ -16,12 +16,6 @@ const filteredData = computed(() => {
       slug: item.path.split('/').pop() || '',
     }));
 });
-
-onMounted(() => {
-  console.log(category.value);
-  console.log(blog.value);
-  console.log(filteredData.value);
-});
 </script>
 
 <template>

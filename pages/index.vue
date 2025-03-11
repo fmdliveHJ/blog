@@ -1,16 +1,31 @@
-<script setup>
+<script setup lang="ts">
+import { useAsyncData } from 'nuxt/app';
+import { computed, onMounted } from 'vue';
+
 const { data: posts } = await useAsyncData('posts', () =>
   queryContent('blog').find()
 );
+
+const postList = computed(() => {
+  if (!posts.value) return [];
+  return (posts.value as any[]).map((post: any) => ({
+    ...post,
+    slug: post.path.split('/').pop() || '',
+  }));
+});
 </script>
 
 <template>
   <div>
     <h1>블로그 포스트 목록</h1>
-    <ul>
-      <li v-for="post in posts" :key="post._path">
-        <NuxtLink :to="post._path">{{ post.title }}</NuxtLink>
+
+    <ul v-if="posts">
+      <li v-for="post in postList" :key="post._path">
+        <NuxtLink :to="`/blog/${post.category}-${post.slug}`">{{
+          post.title
+        }}</NuxtLink>
       </li>
     </ul>
+    <p v-else>Loading...</p>
   </div>
 </template>

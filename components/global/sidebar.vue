@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useRoute, useRouter } from 'vue-router';
+import { ref, watch, onMounted } from 'vue';
+
+import BaseButton from '@/components/buttons/baseButton.vue';
+import Icon from '@/components/icon/icon.vue';
+
 const sideBarItem = [
   { name: 'Home', path: '/', content: 'Blog 메인 홈 입니다.' },
   { name: 'JSTS', path: '/blog/jsts', content: 'Blog 메인 홈 입니다.' }, // ✅ 변경
@@ -19,28 +25,127 @@ const sideBarItem = [
     path: '/blog/projectExp',
     content: 'Blog 메인 홈 입니다.',
   }, // ✅ 변경
+  {
+    name: 'Readings',
+    path: '/blog/readings',
+    content: 'Blog 메인 홈 입니다.',
+  }, // ✅ 변경
 ];
 
 const emit = defineEmits(['click']);
 
+const route = useRoute();
+const activeItem = ref<string | null>(null);
+
+const getActiveItem = () => {
+  return localStorage.getItem('activeItem') || null;
+};
+
 const handleClick = (item: any, event: any) => {
   emit('click', item, event);
+  activeItem.value = item.path;
+  localStorage.setItem('activeItem', item.path);
 };
+
+const isActive = (item: any) => {
+  if (!activeItem.value) return false;
+  if (item.path === '/') {
+    return route.path === '/';
+  }
+
+  return route.path.startsWith(item.path);
+};
+
+onMounted(() => {
+  activeItem.value = getActiveItem();
+});
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (!newPath.startsWith(activeItem.value || '')) {
+      activeItem.value = getActiveItem();
+    }
+  }
+);
+
+const slideActive = ref(true);
+
+const sidebarToggle = () => {
+  console.log('sidebarToggle');
+  slideActive.value = !slideActive.value;
+  console.log(slideActive.value);
+};
+
+const delayedSlideActive = ref(true);
+
+// ✅ slideActive가 true일 때 0.2초 뒤에 delayedSlideActive를 true로 변경
+watch(slideActive, (newVal) => {
+  if (newVal) {
+    setTimeout(() => {
+      delayedSlideActive.value = true;
+    }, 200); // 200ms 지연
+  } else {
+    delayedSlideActive.value = false; // 즉시 사라지게 함
+  }
+});
 </script>
 
 <template>
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <h1>JSTS</h1>
+  <div
+    class="sidebar pt-10 bg-[var(--sidebar-bg-color)] transition-all duration-350"
+    :class="{ 'sidebar-open': slideActive, 'w-[5rem]': !slideActive }"
+  >
+    <div class="relative flex justify-between items-center px-[1rem]">
+      <h1 class="text-2xl text-[var(--point-color)] font-bold">
+        <p v-if="delayedSlideActive" class="flex items-center h-[3rem]">
+          JHJ's BLOG
+        </p>
+        <NuxtLink
+          v-else
+          to="/"
+          class="flex justify-center items-center w-[3rem] h-[3rem] bg-[var(--sub-point-color)] rounded-[0.5rem]"
+        >
+          B
+        </NuxtLink>
+      </h1>
+
+      <BaseButton
+        class="flex justify-center items-center w-[2rem] h-[2rem] bg-[var(--sub-point-color)] rounded-[0.5rem] cursor-pointer"
+        @click="sidebarToggle"
+        :class="{ 'rotate-180 absolute right-[-1.5rem]': !slideActive }"
+      >
+        <Icon icon="arrowLeft" class="w-[1.5rem] h-[1.5rem]" />
+      </BaseButton>
     </div>
-    <div class="sidebar-list">
-      <div v-for="item in sideBarItem" :key="item.name">
+    <div
+      class="sidebar-list mt-[2rem]"
+      :class="{
+        'ml-[0.5rem] mr-[0.5rem]': !slideActive,
+        'mr-[1rem]': slideActive,
+      }"
+    >
+      <div
+        v-for="item in sideBarItem"
+        :key="item.name"
+        class="rounded-[0.5rem] overflow-hidden"
+      >
         <NuxtLink
           :to="item.path"
-          class="sidebar-link"
+          class="flex w-full p-[1rem] gap-3"
+          :class="{
+            'bg-[var(--sub-point-color)]': isActive(item),
+            'justify-center': !slideActive,
+          }"
           @click="handleClick(item, $event)"
         >
-          <div class="sidebar-item">{{ item.name }}</div>
+          <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
+          <span
+            class="sidebar-item"
+            :class="{ 'w-[0rem] opacity-0': !delayedSlideActive }"
+          >
+            {{ item.name }}
+          </span>
         </NuxtLink>
       </div>
     </div>
@@ -48,12 +153,7 @@ const handleClick = (item: any, event: any) => {
 </template>
 
 <style scoped>
-.sidebar-link {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
+.sidebar-open {
+  width: var(--sidebar-width);
 }
 </style>

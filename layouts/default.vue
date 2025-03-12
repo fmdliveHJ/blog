@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect, onMounted, watch } from 'vue';
-import '../assets/styles/main.scss';
+import '../assets/styles/main.css';
 import Sidebar from '../components/global/sidebar.vue';
 import Header from '../components/global/header.vue';
 
@@ -11,7 +10,6 @@ const handleSideBarClick = (
   item: { name: string; path: string; content: string },
   event: Event
 ) => {
-  console.log('Sidebar에서 클릭된 아이템:', item);
   sideBarItem.value = item;
 };
 
@@ -30,7 +28,7 @@ watch(sideBarItem, (newValue) => {
 </script>
 
 <template>
-  <div id="layout" class="flex">
+  <div id="layout" class="flex gap-20">
     <Sidebar @click="handleSideBarClick" />
     <div class="page-container">
       <Header :sideBarItem="sideBarItem" />

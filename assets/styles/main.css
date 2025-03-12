@@ -1,1 +1,9 @@
 @import 'tailwindcss';
+
+:root {
+  --sidebar-width: 340px;
+  --sidebar-bg-color: #f6f7fe;
+
+  --point-color: #007bff;
+  --sub-point-color: #dfe7ff;
+}

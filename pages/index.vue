@@ -28,6 +28,7 @@ const postList = computed(() => {
       </li>
     </ul>
 
+    <h3>Articles</h3>
     <ul v-if="posts">
       <li v-for="post in postList" :key="post._path">
         <NuxtLink :to="`/blog/${post.category}-${post.slug}`">{{

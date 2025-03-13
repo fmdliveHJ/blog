@@ -79,14 +79,13 @@ const sidebarToggle = () => {
 
 const delayedSlideActive = ref(true);
 
-// ✅ slideActive가 true일 때 0.2초 뒤에 delayedSlideActive를 true로 변경
 watch(slideActive, (newVal) => {
   if (newVal) {
     setTimeout(() => {
       delayedSlideActive.value = true;
-    }, 200); // 200ms 지연
+    }, 200);
   } else {
-    delayedSlideActive.value = false; // 즉시 사라지게 함
+    delayedSlideActive.value = false;
   }
 });
 </script>
@@ -94,10 +93,10 @@ watch(slideActive, (newVal) => {
 <template>
   <div
     class="sidebar pt-10 bg-[var(--sidebar-bg-color)] transition-all duration-350"
-    :class="{ 'sidebar-open': slideActive, 'w-[5rem]': !slideActive }"
+    :class="{ 'sidebar-open': slideActive, 'sidebar-close': !slideActive }"
   >
     <div class="relative flex justify-between items-center px-[1rem]">
-      <h1 class="text-2xl text-[var(--point-color)] font-bold">
+      <h1 class="text-3xl text-[var(--point-color)] font-bold">
         <p v-if="delayedSlideActive" class="flex items-center h-[3rem]">
           JHJ's BLOG
         </p>
@@ -142,7 +141,7 @@ watch(slideActive, (newVal) => {
           <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
           <span
             class="sidebar-item"
-            :class="{ 'w-[0rem] opacity-0': !delayedSlideActive }"
+            :class="{ 'w-[0rem] opacity-0 absolute': !delayedSlideActive }"
           >
             {{ item.name }}
           </span>
@@ -154,6 +153,10 @@ watch(slideActive, (newVal) => {
 
 <style scoped>
 .sidebar-open {
-  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+}
+
+.sidebar-close {
+  min-width: 5rem;
 }
 </style>

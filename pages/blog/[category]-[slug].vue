@@ -15,22 +15,17 @@ const { data: blog } = await useAsyncData(() => queryContent('blog').find());
 
 const post = computed(() => {
   if (!blog.value) return null;
-  return blog.value.find((item) => {
+  return blog.value.find((item: any) => {
     return (
       item.path.replace(/\/$/, '') === `/blog/${category.value}/${slug.value}`
     );
   });
-});
-
-onMounted(() => {
-  console.log(blog.value);
-  console.log(post.value);
 });
 </script>
 
 <template>
   <div>
     <h1>{{ post?.title }}</h1>
-    <ContentRenderer :value="post" />
+    <ContentRenderer v-if="post" :value="post" />
   </div>
 </template>

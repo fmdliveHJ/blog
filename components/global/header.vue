@@ -11,8 +11,10 @@ const sideBarItem = computed(() => props.sideBarItem);
 
 <template>
   <header class="header flex justify-between items-center">
-    <div class="">
-      <h1>{{ sideBarItem?.name }}</h1>
+    <div class="flex flex-col gap-2">
+      <h2 class="text-[2rem] font-bold leading-[3rem]">
+        {{ sideBarItem?.name }}
+      </h2>
       <div>{{ sideBarItem?.content }}</div>
     </div>
     <div class="header-search">

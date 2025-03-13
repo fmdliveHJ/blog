@@ -28,11 +28,11 @@ watch(sideBarItem, (newValue) => {
 </script>
 
 <template>
-  <div id="layout" class="flex gap-20">
+  <div id="layout" class="flex">
     <Sidebar @click="handleSideBarClick" />
-    <div class="page-container">
+    <div class="page-container w-full pt-10 pl-20 pr-20">
       <Header :sideBarItem="sideBarItem" />
-      <main>
+      <main class="mt-[2rem]">
         <slot />
       </main>
     </div>

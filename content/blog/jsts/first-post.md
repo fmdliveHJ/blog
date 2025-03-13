@@ -4,6 +4,7 @@ description: 'Nuxt Content를 사용한 블로그 구축'
 date: '2024-02-22'
 category: 'jsts'
 path: '/blog/jsts/first-post'
+image: '/images/blog/dummy.png'
 ---
 
 ## 환영합니다!

@@ -20,11 +20,27 @@ const filteredData = computed(() => {
 
 <template>
   <div>
-    <ul>
-      <li v-for="item in filteredData" :key="item.slug">
+    <ul class="flex flex-wrap w-full mx-[-0.5rem]">
+      <li
+        v-for="item in filteredData.slice(0, 9)"
+        :key="item.slug"
+        class="w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0.5rem] mb-[1rem]"
+      >
         <NuxtLink :to="`/blog/${category}-${item.slug}`">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
+          <div
+            class="flex relative w-full h-[150px] rounded-[0.5rem] overflow-hidden"
+          >
+            <img class="w-full" :src="item.image" alt="post.title" />
+            <span
+              class="absolute bottom-0 right-0 bg-black/50 text-white text-[0.8rem] px-2 py-1 rounded-md"
+              >{{ item.category }}</span
+            >
+          </div>
+          <div class="flex flex-col h-[5rem] gap-[0.5rem] mt-[1rem]">
+            <h4 class="text-[1rem] font-medium">{{ item.title }}</h4>
+            <p class="text-[0.8rem] text-gray-500">{{ item.description }}</p>
+            <span class="text-[0.8rem] text-gray-500">{{ item.date }}</span>
+          </div>
         </NuxtLink>
       </li>
     </ul>

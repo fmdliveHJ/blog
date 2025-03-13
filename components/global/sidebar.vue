@@ -1,55 +1,40 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { ref, watch, onMounted } from 'vue';
-
 import BaseButton from '@/components/buttons/baseButton.vue';
 import Icon from '@/components/icon/icon.vue';
-import { useSidebarStore } from '@/store/sidebar';
-
-const sidebarStore = useSidebarStore();
-
-const { addSelectedItem } = sidebarStore;
-
-const sideBarItem = [
-  { name: 'Home', path: '/', content: 'Blog 메인 홈 입니다.' },
-  { name: 'JSTS', path: '/blog/jsts', content: 'Blog 메인 홈 입니다.' }, // ✅ 변경
-  { name: 'Frontend', path: '/blog/frontend', content: 'Blog 메인 홈 입니다.' }, // ✅ 변경
-  { name: 'Backend', path: '/blog/backend', content: 'Blog 메인 홈 입니다.' }, // ✅ 변경
-  {
-    name: 'Interactive',
-    path: '/blog/interactive',
-    content: 'Blog 메인 홈 입니다.',
-  }, // ✅ 변경
-  {
-    name: 'DSA Coding',
-    path: '/blog/dsaCoding',
-    content: 'Blog 메인 홈 입니다.',
-  }, // ✅ 변경
-  {
-    name: 'Project Experience',
-    path: '/blog/projectExp',
-    content: 'Blog 메인 홈 입니다.',
-  }, // ✅ 변경
-  {
-    name: 'Readings',
-    path: '/blog/readings',
-    content: 'Blog 메인 홈 입니다.',
-  }, // ✅ 변경
-];
 
 const emit = defineEmits(['click']);
-
 const route = useRoute();
 const activeItem = ref<string | null>(null);
 
+const slideActive = ref(true);
+const delayedSlideActive = ref(true);
+
+const sideBarItem = [
+  { name: 'Home', path: '/' },
+  { name: 'JSTS', path: '/blog/jsts' },
+  { name: 'Frontend', path: '/blog/frontend' },
+  { name: 'Backend', path: '/blog/backend' },
+  { name: 'Interactive', path: '/blog/interactive' },
+  { name: 'DSA Coding', path: '/blog/dsaCoding' },
+  { name: 'Project Experience', path: '/blog/projectExp' },
+  { name: 'Readings', path: '/blog/readings' },
+];
+
 const getActiveItem = () => {
-  return localStorage.getItem('activeItem') || null;
+  if (process.client) {
+    return localStorage.getItem('activeItem') || null;
+  }
+  return null;
 };
 
 const handleClick = (item: any, event: any) => {
   emit('click', item, event);
   activeItem.value = item.path;
-  localStorage.setItem('activeItem', item.path);
+  if (process.client) {
+    localStorage.setItem('activeItem', item.path);
+  }
 };
 
 const isActive = (item: any) => {
@@ -57,7 +42,6 @@ const isActive = (item: any) => {
   if (item.path === '/') {
     return route.path === '/';
   }
-
   return route.path.startsWith(item.path);
 };
 
@@ -74,15 +58,9 @@ watch(
   }
 );
 
-const slideActive = ref(true);
-
 const sidebarToggle = () => {
-  console.log('sidebarToggle');
   slideActive.value = !slideActive.value;
-  console.log(slideActive.value);
 };
-
-const delayedSlideActive = ref(true);
 
 watch(slideActive, (newVal) => {
   if (newVal) {

@@ -7,8 +7,6 @@ const selectedItems = ref('');
 const route = useRoute();
 
 watchEffect(() => {
-  console.log('🔍 route.path:', route.path);
-
   let selectedText = 'home';
 
   const pathMappings: Record<string, string> = {

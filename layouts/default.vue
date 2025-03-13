@@ -14,15 +14,19 @@ const handleSideBarClick = (
 };
 
 onMounted(() => {
-  const saveItem = localStorage.getItem('sideBarItem');
-  if (saveItem) {
-    sideBarItem.value = JSON.parse(saveItem);
+  if (process.client) {
+    const saveItem = localStorage.getItem('sideBarItem');
+    if (saveItem) {
+      sideBarItem.value = JSON.parse(saveItem);
+    }
   }
 });
 
 watch(sideBarItem, (newValue) => {
   if (newValue) {
-    localStorage.setItem('sideBarItem', JSON.stringify(newValue));
+    if (process.client) {
+      localStorage.setItem('sideBarItem', JSON.stringify(newValue));
+    }
   }
 });
 </script>

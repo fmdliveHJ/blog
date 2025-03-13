@@ -2,6 +2,7 @@
 title: '두 번째 블로그 글'
 description: 'Nuxt Content를 사용한 블로그 구축'
 date: '2024-02-22'
+name: 'Jsts'
 category: 'jsts'
 path: '/blog/jsts/second-post'
 ---

@@ -2,6 +2,10 @@
 import { useAsyncData } from 'nuxt/app';
 import { computed, onMounted } from 'vue';
 import Icon from '@/components/icon/icon.vue';
+import { useSidebarStore } from '@/store/sidebar';
+
+const sidebarStore = useSidebarStore();
+const { addSelectedItem } = sidebarStore;
 
 const { data: posts } = await useAsyncData('posts', () =>
   queryContent('blog').find()
@@ -46,9 +50,14 @@ const sortedCategories = computed(() => {
     .slice(0, 3);
 });
 
-onMounted(() => {
-  console.log(sortedCategories.value);
-});
+const emit = defineEmits(['update-category']);
+
+const mainListClick = (post: any) => {
+  console.log(post.name);
+  localStorage.setItem('activeItem', post.name);
+  emit('update-category', post.name);
+  addSelectedItem(post.name);
+};
 </script>
 
 <template>
@@ -60,7 +69,11 @@ onMounted(() => {
         :key="post.category"
         class="flex items-center w-[30%] h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem]"
       >
-        <NuxtLink :to="`/blog/${post.category}`" class="flex gap-[2rem]">
+        <NuxtLink
+          :to="`/blog/${post.category}`"
+          class="flex gap-[2rem]"
+          @click="mainListClick(post)"
+        >
           <div class="flex justify-center items-center">
             <img
               class="w-[4rem] h-[4rem] rounded-full"
@@ -86,14 +99,17 @@ onMounted(() => {
         :key="post._path"
         class="w-[30%] p-[0.5rem] shadow-md rounded-[0.5rem]"
       >
-        <NuxtLink :to="`/blog/${post.category}-${post.slug}`">
+        <NuxtLink
+          :to="`/blog/${post.category}-${post.slug}`"
+          @click="mainListClick(post)"
+        >
           <div
             class="flex relative w-full h-[150px] rounded-[0.5rem] overflow-hidden"
           >
             <img class="w-full" :src="post.image" alt="post.title" />
             <span
               class="absolute bottom-0 right-0 bg-black/50 text-white text-[0.8rem] px-2 py-1 rounded-md"
-              >{{ post.category }}</span
+              >{{ post.name }}</span
             >
           </div>
           <div class="flex flex-col h-[5rem] gap-[0.5rem] mt-[1rem]">

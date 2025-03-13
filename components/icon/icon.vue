@@ -17,5 +17,5 @@ const imgSrc = computed(() => {
 </script>
 
 <template>
-  <img v-if="imgSrc" :src="imgSrc" :alt="icon" />
+  <img v-if="imgSrc" :src="imgSrc" :alt="props.icon" />
 </template>

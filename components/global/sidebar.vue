@@ -4,6 +4,11 @@ import { ref, watch, onMounted } from 'vue';
 
 import BaseButton from '@/components/buttons/baseButton.vue';
 import Icon from '@/components/icon/icon.vue';
+import { useSidebarStore } from '@/store/sidebar';
+
+const sidebarStore = useSidebarStore();
+
+const { addSelectedItem } = sidebarStore;
 
 const sideBarItem = [
   { name: 'Home', path: '/', content: 'Blog 메인 홈 입니다.' },
@@ -97,9 +102,13 @@ watch(slideActive, (newVal) => {
   >
     <div class="relative flex justify-between items-center px-[1rem]">
       <h1 class="text-3xl text-[var(--point-color)] font-bold">
-        <p v-if="delayedSlideActive" class="flex items-center h-[3rem]">
+        <NuxtLink
+          v-if="delayedSlideActive"
+          to="/"
+          class="flex items-center h-[3rem]"
+        >
           JHJ's BLOG
-        </p>
+        </NuxtLink>
         <NuxtLink
           v-else
           to="/"

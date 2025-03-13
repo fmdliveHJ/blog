@@ -2,6 +2,7 @@
 title: '첫 번째 블로그 글'
 description: 'Nuxt Content를 사용한 블로그 구축'
 date: '2024-02-22'
+name: 'interactive'
 category: 'interactive'
 path: '/blog/interactive/test'
 ---

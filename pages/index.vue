@@ -2,10 +2,6 @@
 import { useAsyncData } from 'nuxt/app';
 import { computed, onMounted } from 'vue';
 import Icon from '@/components/icon/icon.vue';
-import { useSidebarStore } from '@/store/sidebar';
-
-const sidebarStore = useSidebarStore();
-const { addSelectedItem } = sidebarStore;
 
 const { data: posts } = await useAsyncData('posts', () =>
   queryContent('blog').find()
@@ -56,7 +52,6 @@ const mainListClick = (post: any) => {
   console.log(post.name);
   localStorage.setItem('activeItem', post.name);
   emit('update-category', post.name);
-  addSelectedItem(post.name);
 };
 </script>
 

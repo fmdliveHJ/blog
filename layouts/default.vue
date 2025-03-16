@@ -36,7 +36,7 @@ watch(sideBarItem, (newValue) => {
     <Sidebar @click="handleSideBarClick" />
     <div class="page-container w-full pt-10 pl-20 pr-20">
       <Header :sideBarItem="sideBarItem" />
-      <main class="mt-[2rem]">
+      <main class="mt-[2rem] h-[calc(100%-10rem)] overflow-y-auto">
         <slot />
       </main>
     </div>

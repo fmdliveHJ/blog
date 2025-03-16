@@ -16,13 +16,26 @@ const filteredData = computed(() => {
       slug: item.path.split('/').pop() || '',
     }));
 });
+
+const currentPage = ref(1);
+const pageSize = ref(9);
+
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return filteredData.value.slice(start, end);
+});
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+};
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col justify-between gap-[3rem]">
     <ul class="flex flex-wrap w-full mx-[-0.5rem]">
       <li
-        v-for="item in filteredData.slice(0, 9)"
+        v-for="item in paginatedData"
         :key="item.slug"
         class="w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0.5rem] mb-[1rem]"
       >
@@ -44,6 +57,13 @@ const filteredData = computed(() => {
         </NuxtLink>
       </li>
     </ul>
+
+    <Pagination
+      :total="filteredData.length"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      @update:current-page="handlePageChange"
+    />
   </div>
 </template>
 

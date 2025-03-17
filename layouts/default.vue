@@ -43,8 +43,11 @@ watch(sideBarItem, (newValue) => {
   </div>
 </template>
 
-<style scoped>
+<style>
 #layout {
   height: 100vh;
+}
+body {
+  @apply bg-[#f5f5f6] text-sm;
 }
 </style>

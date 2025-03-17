@@ -62,7 +62,7 @@ const mainListClick = (post: any) => {
       <li
         v-for="post in sortedCategories"
         :key="post.category"
-        class="flex items-center w-[30%] h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem]"
+        class="flex items-center w-[30%] h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}`"
@@ -92,7 +92,7 @@ const mainListClick = (post: any) => {
       <li
         v-for="post in postList.slice(0, 6)"
         :key="post._path"
-        class="w-[30%] p-[0.5rem] shadow-md rounded-[0.5rem]"
+        class="w-[30%] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}-${post.slug}`"

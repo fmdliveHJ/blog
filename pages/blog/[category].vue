@@ -32,12 +32,12 @@ const handlePageChange = (page: number) => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-between gap-[3rem]">
+  <div class="content flex flex-col justify-between gap-[3rem]">
     <ul class="flex flex-wrap w-full mx-[-0.5rem]">
       <li
         v-for="item in paginatedData"
         :key="item.slug"
-        class="w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0.5rem] mb-[1rem]"
+        class="w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0.5rem] mb-[1rem] bg-white"
       >
         <NuxtLink :to="`/blog/${category}-${item.slug}`">
           <div
@@ -67,8 +67,36 @@ const handlePageChange = (page: number) => {
   </div>
 </template>
 
-<style scoped>
+<style>
 li {
   cursor: pointer;
+}
+
+.content p:not(:last-child),
+.content li:not(:last-child),
+.content blockquote:not(:last-child),
+.content h1:not(:last-child),
+.content h2:not(:last-child),
+.content h3:not(:last-child),
+.content h4:not(:last-child),
+.content pre:not(:last-child),
+.content table:not(:last-child) {
+  @apply mb-4;
+}
+
+.content h1 {
+  @apply text-3xl font-bold;
+}
+.content h2 {
+  @apply text-2xl font-bold;
+}
+.content h3 {
+  @apply text-xl font-bold;
+}
+.content h4 {
+  @apply text-lg font-bold;
+}
+.content h5 {
+  @apply text-base font-bold;
 }
 </style>

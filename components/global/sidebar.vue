@@ -71,6 +71,10 @@ watch(slideActive, (newVal) => {
     delayedSlideActive.value = false;
   }
 });
+
+function defineEmits(arg0: 'click'[]) {
+  throw new Error('Function not implemented.');
+}
 </script>
 
 <template>

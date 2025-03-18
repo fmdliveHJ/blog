@@ -19,7 +19,7 @@ const sortedCategories = computed(() => {
   const categoryMap = postList.value.reduce(
     (
       acc: Record<string, { category: string; date: string; count: number }>,
-      post
+      post: { category: string; date: string; count: number }
     ) => {
       if (
         !acc[post.category] ||
@@ -49,7 +49,6 @@ const sortedCategories = computed(() => {
 const emit = defineEmits(['update-category']);
 
 const mainListClick = (post: any) => {
-  console.log(post.name);
   localStorage.setItem('activeItem', post.name);
   emit('update-category', post.name);
 };

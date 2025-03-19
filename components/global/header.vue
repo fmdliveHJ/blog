@@ -60,17 +60,6 @@ const extractTextOnly = (children: any) => {
   return texts.join(' ');
 };
 
-const extractTextFromChildren = (children: any) => {
-  let texts: string[] = [];
-  children.forEach((child: any) => {
-    if (child.props?.text) texts.push(child.props.text);
-    if (child.children) {
-      texts = texts.concat(extractTextFromChildren(child.children));
-    }
-  });
-  return texts;
-};
-
 const blogContent = computed(() => {
   if (!blog.value) return [];
 
@@ -86,26 +75,21 @@ const blogContent = computed(() => {
   });
 });
 
-watchEffect(() => {
-  console.log(JSON.stringify(blogContent.value, null, 2));
-});
-
 const searchResult = computed(() => {
   if (!searchValue.value.trim()) return [];
 
   const query = searchValue.value.trim().toLowerCase();
 
   return blogContent.value.filter((post: any) => {
-    // 검색할 필드들을 하나의 문자열로 합쳐서 검색
     const searchableText = [
       post.title,
       post.category,
       post.date,
       post.description,
-      post.content, // 본문 내용
+      post.content,
     ]
-      .join(' ') // 하나의 문자열로 결합
-      .toLowerCase(); // 대소문자 무시
+      .join(' ')
+      .toLowerCase();
 
     return searchableText.includes(query);
   });

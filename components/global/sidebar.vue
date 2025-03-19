@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, inject } from 'vue';
 import BaseButton from '@/components/buttons/baseButton.vue';
 import Icon from '@/components/icon/icon.vue';
 
@@ -11,6 +11,11 @@ const activeItem = ref<string | null>(null);
 const slideActive = ref(true);
 const delayedSlideActive = ref(true);
 
+const rawCategoryCounts = inject(
+  'categoryCounts',
+  ref<Record<string, number>>({})
+);
+
 const sideBarItem = [
   { name: 'Home', path: '/' },
   { name: 'JSTS', path: '/blog/jsts' },
@@ -18,9 +23,35 @@ const sideBarItem = [
   { name: 'Backend', path: '/blog/backend' },
   { name: 'Interactive', path: '/blog/interactive' },
   { name: 'DSA Coding', path: '/blog/dsaCoding' },
-  { name: 'Project Experience', path: '/blog/projectExp' },
+  { name: 'Project Experience', path: '/blog/ProjectExperience' },
   { name: 'Readings', path: '/blog/readings' },
 ];
+
+const categoryCounts = computed(() => {
+  const normalizedCounts: Record<string, number> = {};
+  for (const key in rawCategoryCounts.value) {
+    normalizedCounts[key.toLowerCase()] = rawCategoryCounts.value[key];
+  }
+  return normalizedCounts;
+});
+
+interface SidebarItem {
+  name: string;
+  path: string;
+}
+
+const filteredSideBarItems = ref<SidebarItem[]>([]);
+
+// ✅ categoryCounts가 변경될 때마다 Sidebar 항목을 필터링
+watchEffect(() => {
+  filteredSideBarItems.value = sideBarItem.filter((item) => {
+    return (
+      item.name === 'Home' ||
+      categoryCounts.value[item.name.replace(/\s/g, '').toLowerCase()] !==
+        undefined
+    );
+  });
+});
 
 const getActiveItem = () => {
   if (process.client) {
@@ -116,7 +147,7 @@ function defineEmits(arg0: 'click'[]) {
       }"
     >
       <div
-        v-for="item in sideBarItem"
+        v-for="item in filteredSideBarItems"
         :key="item.name"
         class="rounded-[0.5rem] overflow-hidden"
       >

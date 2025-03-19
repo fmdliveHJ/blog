@@ -2,6 +2,22 @@
 import '../assets/styles/main.css';
 import Sidebar from '../components/global/sidebar.vue';
 import Header from '../components/global/header.vue';
+import { ref, onMounted, watch, provide } from 'vue';
+
+const { data: posts } = await useAsyncData('posts', () =>
+  queryContent('blog').find()
+);
+
+const categoryCounts = computed(() => {
+  if (!posts.value) return {};
+
+  return posts.value.reduce((acc: Record<string, number>, post: any) => {
+    if (post.category) {
+      acc[post.category] = (acc[post.category] || 0) + 1;
+    }
+    return acc;
+  }, {});
+});
 
 const sideBarItem = ref<{ name: string; path: string; content: string } | null>(
   null
@@ -14,6 +30,7 @@ const handleSideBarClick = (
 };
 
 onMounted(() => {
+  console.log(categoryCounts.value);
   if (process.client) {
     const saveItem = localStorage.getItem('sideBarItem');
     if (saveItem) {
@@ -29,11 +46,13 @@ watch(sideBarItem, (newValue) => {
     }
   }
 });
+
+provide('categoryCounts', categoryCounts);
 </script>
 
 <template>
   <div id="layout" class="flex">
-    <Sidebar @click="handleSideBarClick" />
+    <Sidebar @click="handleSideBarClick" :categoryCounts="categoryCounts" />
     <div class="page-container w-full pt-10 pl-20 pr-20">
       <Header :sideBarItem="sideBarItem" />
       <main class="mt-[2rem] h-[calc(100%-10rem)] overflow-y-auto">

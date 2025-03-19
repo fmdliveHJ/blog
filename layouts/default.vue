@@ -30,7 +30,6 @@ const handleSideBarClick = (
 };
 
 onMounted(() => {
-  console.log(categoryCounts.value);
   if (process.client) {
     const saveItem = localStorage.getItem('sideBarItem');
     if (saveItem) {
@@ -53,9 +52,13 @@ provide('categoryCounts', categoryCounts);
 <template>
   <div id="layout" class="flex">
     <Sidebar @click="handleSideBarClick" :categoryCounts="categoryCounts" />
-    <div class="page-container w-full pt-10 pl-20 pr-20">
+    <div
+      class="flex flex-col items-start w-full pt-10 pl-[2rem] pr-[2rem] md:pl-[2.5rem] md:pr-[2.5rem]"
+    >
       <Header :sideBarItem="sideBarItem" />
-      <main class="mt-[2rem] h-[calc(100%-10rem)] overflow-y-auto">
+      <main
+        class="w-full min-h-[50%] mt-[2rem] h-[calc(100%-10rem)] max-w-[1200px] mx-0"
+      >
         <slot />
       </main>
     </div>
@@ -64,7 +67,8 @@ provide('categoryCounts', categoryCounts);
 
 <style>
 #layout {
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 5rem;
 }
 body {
   @apply bg-[#f5f5f6] text-sm;

@@ -55,22 +55,22 @@ const mainListClick = (post: any) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <h3 class="text-[1.5rem] font-medium">Top Category</h3>
+  <div class="flex flex-col gap-2 md:gap-4">
+    <h3 class="text-[1rem] md:text-[1.5rem] font-medium">Top Category</h3>
     <ul class="flex flex-wrap justify-between gap-4">
       <li
         v-for="post in sortedCategories"
         :key="post.category"
-        class="flex items-center w-[30%] h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
+        class="flex items-center w-[100%] md:w-[30%] h-[5rem] md:h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}`"
-          class="flex gap-[2rem]"
+          class="flex gap-[1rem] md:gap-[2rem]"
           @click="mainListClick(post)"
         >
           <div class="flex justify-center items-center">
             <img
-              class="w-[4rem] h-[4rem] rounded-full"
+              class="w-[3rem] h-[3rem] md:w-[4rem] md:h-[4rem] rounded-full"
               src="https://placehold.co/50x50"
               alt="post.category"
             />
@@ -86,19 +86,19 @@ const mainListClick = (post: any) => {
       </li>
     </ul>
 
-    <h3 class="text-[1.5rem] font-medium mt-[2rem]">Articles</h3>
+    <h3 class="text-[1rem] md:text-[1.5rem] font-medium mt-[2rem]">Articles</h3>
     <ul v-if="posts" class="flex flex-wrap justify-between gap-4">
       <li
         v-for="post in postList.slice(0, 6)"
         :key="post._path"
-        class="w-[30%] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
+        class="w-[100%] md:w-[calc(50%-0.5rem)] lg:w-[calc(30%-0.5rem)] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}-${post.slug}`"
           @click="mainListClick(post)"
         >
           <div
-            class="flex relative w-full h-[150px] rounded-[0.5rem] overflow-hidden"
+            class="flex relative w-full h-[8rem] md:h-[10rem] rounded-[0.5rem] overflow-hidden"
           >
             <img class="w-full" :src="post.image" alt="post.title" />
             <span
@@ -106,9 +106,24 @@ const mainListClick = (post: any) => {
               >{{ post.name }}</span
             >
           </div>
-          <div class="flex flex-col h-[5rem] gap-[0.5rem] mt-[1rem]">
-            <h4 class="text-[1rem] font-medium">{{ post.title }}</h4>
-            <p class="text-[0.8rem] text-gray-500">{{ post.description }}</p>
+          <div
+            class="flex flex-col h-[4rem] md:h-[5rem] gap-[0.25rem] md:gap-[0.5rem] mt-[1rem]"
+          >
+            <h4
+              class="text-[1rem] md:text-[1.25rem] font-medium text-ellipsis overflow-hidden whitespace-nowrap"
+            >
+              {{ post.title }}
+            </h4>
+            <p
+              class="text-[0.8rem] md:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
+            >
+              {{ post.description }}
+            </p>
+            <p
+              class="text-[0.8rem] md:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
+            >
+              {{ post.date }}
+            </p>
           </div>
         </NuxtLink>
       </li>

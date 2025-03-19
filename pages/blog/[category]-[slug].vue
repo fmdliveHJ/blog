@@ -21,7 +21,7 @@ const post = computed(() => {
 </script>
 
 <template>
-  <div class="content bg-white p-[2rem] rounded-[1rem]">
+  <div class="content min-h-[50%] bg-white p-[1rem] md:p-[2rem] rounded-[1rem]">
     <h1>{{ post?.title }}</h1>
     <ContentRenderer v-if="post" :value="post" />
   </div>
@@ -41,18 +41,18 @@ const post = computed(() => {
 }
 
 .content h1 {
-  @apply text-3xl font-bold;
+  @apply text-xl md:text-3xl font-bold;
 }
 .content h2 {
-  @apply text-2xl font-bold;
+  @apply text-lg md:text-2xl font-bold;
 }
 .content h3 {
-  @apply text-xl font-bold;
+  @apply text-lg md:text-2xl font-bold;
 }
 .content h4 {
-  @apply text-lg font-bold;
+  @apply text-lg md:text-xl font-bold;
 }
 .content h5 {
-  @apply text-base font-bold;
+  @apply text-base md:text-lg font-bold;
 }
 </style>

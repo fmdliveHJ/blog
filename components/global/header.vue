@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect, onMounted } from 'vue';
+import { computed, watchEffect, onMounted, onUnmounted } from 'vue';
 import BaseButton from '@/components/buttons/baseButton.vue';
 import Icon from '@/components/icon/icon.vue';
 import { useAsyncData } from 'nuxt/app';
@@ -75,6 +75,30 @@ const blogContent = computed(() => {
   });
 });
 
+const windowWidth = ref(0);
+
+// 1024px 이하일 때 searchInput을 자동 활성화
+const isSearchActive = computed(() => {
+  searchInput.value = true;
+  return searchInput.value || windowWidth.value <= 1024;
+});
+
+// 창 크기 변경 시 업데이트
+const updateSearchState = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+// 컴포넌트가 마운트될 때 이벤트 추가
+onMounted(() => {
+  windowWidth.value = window.innerWidth; // 초기값 설정
+  window.addEventListener('resize', updateSearchState);
+});
+
+// 컴포넌트가 언마운트될 때 이벤트 제거
+onUnmounted(() => {
+  window.removeEventListener('resize', updateSearchState);
+});
+
 const searchResult = computed(() => {
   if (!searchValue.value.trim()) return [];
 
@@ -128,9 +152,11 @@ watchEffect(() => {
 </script>
 
 <template>
-  <header class="header flex justify-between items-center">
+  <header
+    class="header flex-col md:flex-row w-full max-w-[1200px] flex justify-between items-start md:items-center gap-2 md:gap-0"
+  >
     <div class="flex flex-col gap-2">
-      <h2 class="text-[2rem] font-bold leading-[3rem]">
+      <h2 class="text-[1.5rem] md:text-[2rem] font-bold leading-[3rem]">
         {{ selectedItems }}
       </h2>
     </div>
@@ -138,13 +164,13 @@ watchEffect(() => {
       ref="searchContainer"
       class="header-search relative flex gap-2 bg-white border-2 border-gray-300"
       :class="{
-        'search-active': searchInput,
+        'search-active': isSearchActive,
         'rounded-[50%] justify-center items-center min-w-[3rem] h-[3rem]':
           !searchInput,
       }"
     >
       <BaseButton
-        @click="searchInput = !searchInput"
+        @click="(searchInput = !searchInput), (isFocused = false)"
         class="flex justify-center items-center"
       >
         <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
@@ -228,6 +254,14 @@ watchEffect(() => {
 .header {
   transition: all 0.3s ease;
 }
+/* .header-search {
+  @media (max-width: 768px) {
+    width: 100%;
+    border-radius: 0.5rem;
+    justify-content: flex-start;
+    padding: 0.5rem;  
+  }
+} */
 
 .search-active {
   justify-content: flex-start;
@@ -237,6 +271,13 @@ watchEffect(() => {
   transition: all 0.3s ease;
   background-color: white;
   padding: 0.5rem;
+  @media (max-width: 1024px) {
+    min-width: 20rem;
+  }
+  @media (max-width: 768px) {
+    transition: all 0.1s ease;
+    min-width: 100%;
+  }
 }
 
 input:focus {

@@ -42,7 +42,6 @@ interface SidebarItem {
 
 const filteredSideBarItems = ref<SidebarItem[]>([]);
 
-// ✅ categoryCounts가 변경될 때마다 Sidebar 항목을 필터링
 watchEffect(() => {
   filteredSideBarItems.value = sideBarItem.filter((item) => {
     return (
@@ -97,7 +96,7 @@ watch(slideActive, (newVal) => {
   if (newVal) {
     setTimeout(() => {
       delayedSlideActive.value = true;
-    }, 200);
+    }, 100);
   } else {
     delayedSlideActive.value = false;
   }
@@ -125,7 +124,7 @@ function defineEmits(arg0: 'click'[]) {
         <NuxtLink
           v-else
           to="/"
-          class="flex justify-center items-center w-[3rem] h-[3rem] bg-[var(--sub-point-color)] rounded-[0.5rem]"
+          class="flex justify-center items-center w-[3rem] h-[3rem] bg-[var(--sub-point-color)] rounded-[0.5rem] hidden md:flex"
         >
           B
         </NuxtLink>
@@ -176,9 +175,28 @@ function defineEmits(arg0: 'click'[]) {
 <style scoped>
 .sidebar-open {
   min-width: var(--sidebar-width);
+  @media (max-width: 1280px) {
+    min-width: 280px;
+  }
+  @media (max-width: 1024px) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+  }
 }
 
 .sidebar-close {
   min-width: 5rem;
+  @media (max-width: 1024px) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    min-width: 280px;
+    transform: translateX(-100%);
+  }
 }
 </style>

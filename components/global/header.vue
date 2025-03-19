@@ -4,13 +4,22 @@ import BaseButton from '@/components/buttons/baseButton.vue';
 import Icon from '@/components/icon/icon.vue';
 import { useAsyncData } from 'nuxt/app';
 import { useRoute } from 'vue-router';
-const selectedItems = ref('');
+
 const route = useRoute();
+const selectedItems = ref('');
 const { data: blog } = await useAsyncData(() => queryContent('blog').find());
-const category = computed(() => route.params.category);
+
+const postList = computed(() => {
+  if (!blog.value) return [];
+  return (blog.value as any[]).map((post: any) => ({
+    ...post,
+    slug: post.path.split('/').pop() || '',
+  }));
+});
+
 const latestPost = computed(() => {
-  if (!blog.value) return null;
-  return (blog.value as any[]).sort(
+  if (!postList.value.length) return null;
+  return [...postList.value].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )[0];
 });
@@ -33,38 +42,76 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 };
 
-const extractTextFromChildren = (children: any) => {
-  let texts: any[] = [];
+const extractTextOnly = (children: any) => {
+  let texts: string[] = [];
+
   children.forEach((child: any) => {
-    if (child.props) {
-      if (child.props.text) texts.push(child.props.text);
-      if (child.props.id) texts.push(child.props.id);
+    if (child.type === 'text') {
+      texts.push(child.value);
+    } else if (
+      child.type === 'element' &&
+      child.tag !== 'pre' &&
+      child.tag !== 'code'
+    ) {
+      if (child.children) texts = texts.concat(extractTextOnly(child.children));
     }
+  });
+
+  return texts.join(' ');
+};
+
+const extractTextFromChildren = (children: any) => {
+  let texts: string[] = [];
+  children.forEach((child: any) => {
+    if (child.props?.text) texts.push(child.props.text);
     if (child.children) {
       texts = texts.concat(extractTextFromChildren(child.children));
     }
   });
-  console.log(texts);
   return texts;
 };
 
-const searchResult = computed(() => {
-  if (!searchValue.value.trim()) return [];
+const blogContent = computed(() => {
+  if (!blog.value) return [];
 
-  return (blog.value as any[]).filter((post: any) => {
-    const textContent = post.body?.children
-      ? extractTextFromChildren(post.body.children).join(' ')
-      : '';
-    return textContent.includes(searchValue.value.trim());
+  return blog.value.map((post: any) => {
+    return {
+      title: post.title,
+      category: post.category,
+      date: post.date,
+      description: post.description,
+      slug: post.path.split('/').pop() || '',
+      content: extractTextOnly(post.body.children),
+    };
   });
 });
 
 watchEffect(() => {
-  console.log(searchResult.value);
+  console.log(JSON.stringify(blogContent.value, null, 2));
+});
+
+const searchResult = computed(() => {
+  if (!searchValue.value.trim()) return [];
+
+  const query = searchValue.value.trim().toLowerCase();
+
+  return blogContent.value.filter((post: any) => {
+    // 검색할 필드들을 하나의 문자열로 합쳐서 검색
+    const searchableText = [
+      post.title,
+      post.category,
+      post.date,
+      post.description,
+      post.content, // 본문 내용
+    ]
+      .join(' ') // 하나의 문자열로 결합
+      .toLowerCase(); // 대소문자 무시
+
+    return searchableText.includes(query);
+  });
 });
 
 onMounted(() => {
-  console.log(blog.value);
   document.addEventListener('click', handleClickOutside);
 });
 
@@ -132,7 +179,10 @@ watchEffect(() => {
         class="absolute top-[3.5rem] left-0 flex flex-col gap-2 w-full bg-white min-h-[5rem] max-h-[10rem] z-10 shadow-md border-2 border-gray-300 rounded-md"
       >
         <div class="flex flex-col gap-2 p-2 border-b-2 border-gray-300">
-          <NuxtLink :to="`/blog/${category}-${latestPost.slug}`">
+          <NuxtLink
+            :to="`/blog/${latestPost.category}-${latestPost.slug}`"
+            @click="isFocused = false"
+          >
             <div class="flex items-center gap-2">
               <div class="w-[1rem] h-[1rem]">
                 <img
@@ -153,29 +203,37 @@ watchEffect(() => {
           </NuxtLink>
         </div>
         <div
-          v-for="post in searchResult"
-          :key="post.id"
-          class="flex flex-col gap-2 p-2"
+          v-if="searchResult.length > 0"
+          class="flex flex-col gap-2 p-2 overflow-y-auto max-h-[10rem]"
         >
-          <NuxtLink :to="`/blog/${category}-${post.slug}`">
-            <div class="flex items-center gap-2">
-              <div class="w-[1rem] h-[1rem]">
-                <img
-                  class="block w-full h-full"
-                  :src="post.image"
-                  alt="profile"
-                />
-              </div>
+          <div v-for="post in searchResult" :key="post.id">
+            <NuxtLink
+              :to="`/blog/${post.category}-${post.slug}`"
+              @click="isFocused = false"
+            >
+              <div class="flex items-center gap-2">
+                <div class="w-[1rem] h-[1rem]">
+                  <img
+                    class="block w-full h-full"
+                    :src="post.image"
+                    alt="profile"
+                  />
+                </div>
 
-              <div class="name">
-                <span>{{ post.title }}</span>
-                <div>
-                  <span>{{ post.category }}</span>
-                  <span>{{ post.date }}</span>
+                <div class="name">
+                  <span>{{ post.title }}</span>
+                  <div>
+                    <span>{{ post.category }}</span>
+                    <span>{{ post.date }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </NuxtLink>
+            </NuxtLink>
+          </div>
+        </div>
+
+        <div v-else class="flex flex-col gap-2 p-2">
+          <span>No results found</span>
         </div>
       </div>
     </div>

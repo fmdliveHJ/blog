@@ -11,6 +11,10 @@ const filteredData = computed(() => {
   if (!blog.value) return [];
   return (blog.value as any[])
     .filter((item: any) => item.category === category.value)
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
     .map((item: any) => ({
       ...item,
       slug: item.path.split('/').pop() || '',

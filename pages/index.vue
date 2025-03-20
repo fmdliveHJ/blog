@@ -56,12 +56,14 @@ const mainListClick = (post: any) => {
 
 <template>
   <div class="flex flex-col gap-2 md:gap-4">
-    <h3 class="text-[1rem] md:text-[1.5rem] font-medium">Top Category</h3>
-    <ul class="flex flex-wrap justify-between gap-4">
+    <h3 class="text-[1rem] md:text-[1.5rem] font-medium font-outfit">
+      Top Category
+    </h3>
+    <ul class="flex flex-wrap mx-[0] md:mx-[-0.5rem]">
       <li
         v-for="post in sortedCategories"
         :key="post.category"
-        class="flex items-center w-[100%] md:w-[30%] h-[5rem] md:h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
+        class="flex items-center w-[100%] md:w-[calc(50%-0.5rem)] lg:w-[calc(33.3333%-1rem)] mx-[0] md:mx-[0.5rem] h-[5rem] md:h-[7rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}`"
@@ -76,22 +78,26 @@ const mainListClick = (post: any) => {
             />
           </div>
           <div class="flex justify-center items-start flex-col gap-[0.5rem]">
-            <p>{{ post.category }}</p>
+            <p class="font-outfit">{{ post.name }}</p>
             <p class="flex items-center gap-[0.5rem]">
-              <Icon icon="search" class="w-[1rem] h-[1rem]" />
-              <span class="text-[0.8rem]">Articles: {{ post.count }}</span>
+              <Icon icon="doc" class="w-[1rem] h-[1rem]" />
+              <span class="text-[0.8rem] font-outfit"
+                >Articles: {{ post.count }}</span
+              >
             </p>
           </div>
         </NuxtLink>
       </li>
     </ul>
 
-    <h3 class="text-[1rem] md:text-[1.5rem] font-medium mt-[2rem]">Articles</h3>
-    <ul v-if="posts" class="flex flex-wrap justify-between gap-4">
+    <h3 class="text-[1rem] md:text-[1.5rem] font-medium mt-[2rem] font-outfit">
+      Articles
+    </h3>
+    <ul v-if="posts" class="flex flex-wrap mx-[0] md:mx-[-0.5rem]">
       <li
         v-for="post in postList.slice(0, 6)"
         :key="post._path"
-        class="w-[100%] md:w-[calc(50%-0.5rem)] lg:w-[calc(30%-0.5rem)] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
+        class="w-[100%] md:w-[calc(50%-0.5rem)] lg:w-[calc(33.3333%-1rem)] mx-[0] md:mx-[0.5rem] mb-[1rem] p-[0.5rem] shadow-md rounded-[0.5rem] bg-white"
       >
         <NuxtLink
           :to="`/blog/${post.category}-${post.slug}`"
@@ -110,17 +116,17 @@ const mainListClick = (post: any) => {
             class="flex flex-col h-[4rem] md:h-[5rem] gap-[0.25rem] md:gap-[0.5rem] mt-[1rem]"
           >
             <h4
-              class="text-[1rem] md:text-[1.25rem] font-medium text-ellipsis overflow-hidden whitespace-nowrap"
+              class="text-[0.8rem] md:text-[1rem] lg:text-[1.25rem] font-medium text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {{ post.title }}
             </h4>
             <p
-              class="text-[0.8rem] md:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
+              class="text-[0.6rem] md:text-[0.8rem] lg:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {{ post.description }}
             </p>
             <p
-              class="text-[0.8rem] md:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
+              class="text-[0.6rem] md:text-[0.8rem] lg:text-[1rem] text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {{ post.date }}
             </p>

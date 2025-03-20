@@ -44,10 +44,10 @@ const post = computed(() => {
   @apply text-xl md:text-3xl font-bold;
 }
 .content h2 {
-  @apply text-lg md:text-2xl font-bold;
+  @apply text-[1rem] md:text-2xl font-bold;
 }
 .content h3 {
-  @apply text-lg md:text-2xl font-bold;
+  @apply text-xl md:text-2xl font-bold;
 }
 .content h4 {
   @apply text-lg md:text-xl font-bold;

@@ -53,11 +53,11 @@ provide('categoryCounts', categoryCounts);
   <div id="layout" class="flex">
     <Sidebar @click="handleSideBarClick" :categoryCounts="categoryCounts" />
     <div
-      class="flex flex-col items-start w-full pt-10 pl-[2rem] pr-[2rem] md:pl-[2.5rem] md:pr-[2.5rem]"
+      class="flex flex-col items-center w-full pt-10 pl-[2rem] pr-[2rem] md:pl-[2.5rem] md:pr-[2.5rem]"
     >
       <Header :sideBarItem="sideBarItem" />
       <main
-        class="w-full min-h-[50%] mt-[2rem] h-[calc(100%-10rem)] max-w-[1200px] mx-0"
+        class="w-full min-h-[50%] mt-[2rem] h-[calc(100%-10rem)] max-w-[1200px] mx-0 pb-[2rem]"
       >
         <slot />
       </main>
@@ -67,8 +67,7 @@ provide('categoryCounts', categoryCounts);
 
 <style>
 #layout {
-  height: 100%;
-  padding-bottom: 5rem;
+  height: 100vh;
 }
 body {
   @apply bg-[#f5f5f6] text-sm;

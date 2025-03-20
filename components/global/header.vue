@@ -156,7 +156,9 @@ watchEffect(() => {
     class="header flex-col md:flex-row w-full max-w-[1200px] flex justify-between items-start md:items-center gap-2 md:gap-0"
   >
     <div class="flex flex-col gap-2">
-      <h2 class="text-[1.5rem] md:text-[2rem] font-bold leading-[3rem]">
+      <h2
+        class="text-[1.5rem] md:text-[2rem] font-medium leading-[3rem] font-outfit"
+      >
         {{ selectedItems }}
       </h2>
     </div>

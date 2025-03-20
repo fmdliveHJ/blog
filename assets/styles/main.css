@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Nanum+Gothic+Coding&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,4 +11,23 @@
 
   --point-color: #007bff;
   --sub-point-color: #dfe7ff;
+
+  --font-family: 'Nanum Gothic', sans-serif;
+  --font-family-outfit: 'Outfit', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+.font-outfit {
+  font-family: var(--font-family-outfit);
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
 }

@@ -57,15 +57,18 @@ const isLastPage = computed(() => {
     <button
       :disabled="isFirstPage"
       @click="changePage(startPage - 1)"
-      class="cursor-pointer"
+      class="cursor-pointer px-2 py-1 h-[2rem] w-[2rem] rounded-[0.5rem]"
     >
-      <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
+      <Icon icon="arrowLeftPagination" class="w-[1rem] h-[1rem]" />
     </button>
 
     <span v-for="page in endPage - startPage + 1" :key="startPage + page - 1">
       <button
-        class="cursor-pointer px-2 py-1 rounded"
-        :class="{ 'bg-black text-white': startPage + page - 1 === currentPage }"
+        class="cursor-pointer px-2 py-1 h-[2rem] w-[2rem] rounded-[0.5rem]"
+        :class="{
+          'bg-[var(--sub-point-color)] text-black font-bold':
+            startPage + page - 1 === currentPage,
+        }"
         @click="changePage(startPage + page - 1)"
       >
         {{ startPage + page - 1 }}
@@ -75,9 +78,9 @@ const isLastPage = computed(() => {
     <button
       :disabled="isLastPage"
       @click="changePage(endPage + 1)"
-      class="cursor-pointer"
+      class="cursor-pointer px-2 py-1 h-[2rem] w-[2rem] rounded-[0.5rem]"
     >
-      <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
+      <Icon icon="arrowLeftPagination" class="w-[1rem] h-[1rem] rotate-180" />
     </button>
   </nav>
 </template>

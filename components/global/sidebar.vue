@@ -17,14 +17,18 @@ const rawCategoryCounts = inject(
 );
 
 const sideBarItem = [
-  { name: 'Home', path: '/' },
-  { name: 'JSTS', path: '/blog/jsts' },
-  { name: 'Frontend', path: '/blog/frontend' },
-  { name: 'Backend', path: '/blog/backend' },
-  { name: 'Interactive', path: '/blog/interactive' },
-  { name: 'DSA Coding', path: '/blog/dsaCoding' },
-  { name: 'Project Experience', path: '/blog/ProjectExperience' },
-  { name: 'Readings', path: '/blog/readings' },
+  { name: 'Home', path: '/', abbreviation: 'H' },
+  { name: 'JSTS', path: '/blog/jsts', abbreviation: 'Js' },
+  { name: 'Frontend', path: '/blog/frontend', abbreviation: 'Fe' },
+  { name: 'Backend', path: '/blog/backend', abbreviation: 'Be' },
+  { name: 'Interactive', path: '/blog/interactive', abbreviation: 'Ix' },
+  { name: 'DSA Coding', path: '/blog/dsaCoding', abbreviation: 'DSA' },
+  {
+    name: 'Project Experience',
+    path: '/blog/ProjectExperience',
+    abbreviation: 'P.E',
+  },
+  { name: 'Books', path: '/blog/books', abbreviation: 'Bks' },
 ];
 
 const categoryCounts = computed(() => {
@@ -33,6 +37,10 @@ const categoryCounts = computed(() => {
     normalizedCounts[key.toLowerCase()] = rawCategoryCounts.value[key];
   }
   return normalizedCounts;
+});
+
+onMounted(() => {
+  console.log(categoryCounts.value);
 });
 
 interface SidebarItem {
@@ -109,7 +117,7 @@ function defineEmits(arg0: 'click'[]) {
 
 <template>
   <div
-    class="sidebar pt-10 bg-[var(--sidebar-bg-color)] transition-all duration-350"
+    class="sidebar relative pt-10 bg-[var(--sidebar-bg-color)] transition-all duration-350"
     :class="{ 'sidebar-open': slideActive, 'sidebar-close': !slideActive }"
   >
     <div class="relative flex justify-between items-center px-[1rem]">
@@ -118,13 +126,14 @@ function defineEmits(arg0: 'click'[]) {
           v-if="delayedSlideActive"
           to="/"
           class="flex items-center h-[3rem]"
-        >
-          JHJ's BLOG
+          ><span class="relative top-[3px]flex items-center font-outfit">
+            JHJ's BLOG
+          </span>
         </NuxtLink>
         <NuxtLink
           v-else
           to="/"
-          class="flex justify-center items-center w-[3rem] h-[3rem] bg-[var(--sub-point-color)] rounded-[0.5rem] hidden md:flex"
+          class="flex justify-center items-center w-[3rem] h-[3rem] bg-[var(--sub-point-color)] rounded-[0.5rem] hidden md:flex font-outfit"
         >
           B
         </NuxtLink>
@@ -141,31 +150,72 @@ function defineEmits(arg0: 'click'[]) {
     <div
       class="sidebar-list mt-[2rem]"
       :class="{
-        'ml-[0.5rem] mr-[0.5rem]': !slideActive,
+        'ml-[1rem] mr-[1rem]': !slideActive,
         'mr-[1rem]': slideActive,
       }"
     >
       <div
         v-for="item in filteredSideBarItems"
         :key="item.name"
-        class="rounded-[0.5rem] overflow-hidden"
+        class="overflow-hidden"
       >
         <NuxtLink
           :to="item.path"
-          class="flex w-full p-[1rem] gap-3"
+          class="relative flex w-full h-[3rem] gap-3 font-noto-sans-display"
           :class="{
-            'bg-[var(--sub-point-color)]': isActive(item),
-            'justify-center': !slideActive,
+            'bg-[var(--sub-point-color)] overflow-hidden': isActive(item),
+            'justify-center rounded-[0.5rem] rounded-l-[0.5rem] rounded-bl-[0.5rem]':
+              !slideActive,
+            'rounded-[0.5rem] rounded-l-none rounded-bl-none overflow-hidden':
+              slideActive,
           }"
           @click="handleClick(item, $event)"
         >
-          <Icon icon="search" class="w-[1.5rem] h-[1.5rem]" />
           <span
-            class="sidebar-item"
+            v-if="slideActive"
+            class="sidebar-item flex items-center font-medium pl-[1rem] font-outfit"
             :class="{ 'w-[0rem] opacity-0 absolute': !delayedSlideActive }"
           >
             {{ item.name }}
           </span>
+          <span
+            v-else
+            class="sidebar-item flex items-center font-medium text-[0.8rem] md:text-[1rem] font-outfit"
+          >
+            {{ item.abbreviation }}
+          </span>
+          <span
+            v-if="categoryCounts[item.name.replace(/\s/g, '').toLowerCase()]"
+            :class="
+              slideActive
+                ? 'text-[0.8rem] absolute right-[1rem] top-[50%] translate-y-[-50%] font-outfit'
+                : 'hidden'
+            "
+          >
+            {{ categoryCounts[item.name.replace(/\s/g, '').toLowerCase()] }}
+          </span>
+        </NuxtLink>
+      </div>
+    </div>
+    <div class="absolute bottom-[1rem] left-[1rem]">
+      <div class="email h-[2rem] flex items-center">
+        <NuxtLink
+          to="mailto:gdalove@naver.com"
+          target="_blank"
+          class="flex gap-[0.5rem] items-center sidebar-item font-medium font-outfit"
+        >
+          <Icon icon="email" class="w-[1.5rem] h-[1.5rem]" />
+          <span>gdlove@naver.com</span>
+        </NuxtLink>
+      </div>
+      <div class="h-[2rem] flex items-center">
+        <NuxtLink
+          to="https://github.com/fmdliveHJ"
+          target="_blank"
+          class="flex gap-[0.5rem] items-center sidebar-item font-medium font-outfit"
+        >
+          <Icon icon="github" class="w-[1.5rem] h-[1.5rem]" />
+          <span>github</span>
         </NuxtLink>
       </div>
     </div>

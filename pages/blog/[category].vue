@@ -37,11 +37,11 @@ const handlePageChange = (page: number) => {
 
 <template>
   <div class="content flex flex-col justify-between gap-[3rem]">
-    <ul class="flex flex-wrap w-full mx-[-0.5rem]">
+    <ul class="flex flex-wrap w-full mx-[0] md:mx-[-0.5rem]">
       <li
         v-for="item in paginatedData"
         :key="item.slug"
-        class="w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0.5rem] mb-[1rem] bg-white"
+        class="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.3333%-1rem)] p-[0.5rem] shadow-md rounded-[0.5rem] mx-[0] md:mx-[0.5rem] mb-[1rem] bg-white"
       >
         <NuxtLink :to="`/blog/${category}-${item.slug}`">
           <div

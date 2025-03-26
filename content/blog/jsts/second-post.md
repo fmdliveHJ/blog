@@ -5,6 +5,7 @@ date: '2024-03-21'
 name: 'Jsts'
 category: 'jsts'
 path: '/blog/jsts/second-post'
+image: '/images/blog/jsts/dummy.png'
 ---
 
 ![Header Image](https://capsule-render.vercel.app/api?type=waving&color=auto&height=300&section=header&text=JUNG%20HYEONJIN&fontSize=50&animation=fadeIn&fontAlignY=38&descAlignY=81&descAlign=-90&fontColor=fff)

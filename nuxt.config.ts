@@ -5,4 +5,12 @@ export default defineNuxtConfig({
   content: {},
   compatibilityDate: '2025-03-17',
   css: ['~/assets/styles/main.css'],
+  nitro: {
+    publicAssets: [
+      {
+        dir: 'public',
+        baseURL: '/',
+      },
+    ],
+  },
 });
